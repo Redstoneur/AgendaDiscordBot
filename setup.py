@@ -17,7 +17,6 @@ class MyClient(d.Client):
         if message.content.startswith('!hello'):
             await message.channel.send('Hello {0.author.mention}'.format(message))
 
-
-client = MyClient()
+client = MyClient(intents=d.Intents.all())
 # variable système pour le token
 client.run(os.environ['TOKEN'])
