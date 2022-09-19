@@ -2,29 +2,29 @@ import os
 
 import discord as d
 
-token = os.environ.get("TOKEN")
-print(token)
-token=os.environ['TOKEN']
-print(token)
-
-class MyClient(d.Client):
-    async def on_ready(self):
-        print('Logged in as')
-        print(self.user.name)
-        print(self.user.id)
-        print('------')
-
-    async def on_message(self, message):
-        # we do not want the bot to reply to itself
-        if message.author.id == self.user.id:
-            return
-
-        if message.content.startswith('!hello'):
-            await message.channel.send('Hello {0.author.mention}'.format(message))
-
+token: str = os.environ['TOKEN']
+if token is None:
+    raise ValueError('Token not set')
+else:
+    print('Token set')
 
 intents = d.Intents.default()
 intents.message_content = True
 
-client = MyClient(intents=intents)
-client.run(token=os.environ['TOKEN'])
+client: d.Client = d.Client(intents=intents)
+
+
+@client.event
+async def on_ready():
+    print('Logged in as {0.user}'.format(client))
+
+
+@client.event
+async def on_message(message: d.Message):
+    if message.author == client.user:
+        return
+    if message.content.startswith('!hello'):
+        await message.channel.send('Hello!')
+
+
+client.run(token)
