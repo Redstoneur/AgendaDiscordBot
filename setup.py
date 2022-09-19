@@ -18,4 +18,4 @@ class MyClient(d.Client):
 
 
 client = MyClient()
-client.run('token')
+client.run('MTAyMTMxNTk2NDQzMzg2Njc3NQ.GHGkv2.HOwk0WzF5TZEUCS2kQBxWuPe_HN_2WGDFVhxA4')
