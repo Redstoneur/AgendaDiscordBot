@@ -19,6 +19,9 @@ class MyClient(d.Client):
             await message.channel.send('Hello {0.author.mention}'.format(message))
 
 
-client = MyClient(intents=d.Intents.all())
+intents = d.Intents.default()
+intents.message_content = True
+
+client = MyClient(intents=intents)
 # variable système pour le token
 client.run(os.environ['TOKEN'])
