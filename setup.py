@@ -1,3 +1,4 @@
+from importBot import os
 from Bot import *
 
 token: str = os.environ['TOKEN']
