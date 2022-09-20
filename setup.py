@@ -1,4 +1,3 @@
-from importBot import os
 from Bot import *
 
 token: str = os.environ['TOKEN']
@@ -11,5 +10,7 @@ else:
 intents = d.Intents.default()
 intents.message_content = True
 
-client: Bot = Bot(intents=intents)
-client.run(token)
+if __name__ == "__main__":
+    client: Bot = Bot(url="http://chronos.iut-velizy.uvsq.fr/EDT/g37478.pdf",
+                      intents=intents)
+    client.run(token)

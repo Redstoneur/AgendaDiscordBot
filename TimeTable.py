@@ -1,22 +1,20 @@
 from importBot import req, p2i, os, t
+import time
 
 
 class TimeTable:
     url: str
     nb_pages: int = 4
-    expentionImage: t.List[str] = ['jpg', 'JPEG']
 
     def __init__(self, url: str) -> None:
         self.url = url
         # Download image
-        self.__defPdf__()
         self.__download__()
         # Convert pdf to image
-        while not os.path.exists('file.pdf'):
-            print('Waiting for file.pdf')
         self.__convert__()
 
     def __download__(self) -> None:
+        self.__defPdf__()
         # Send GET request
         response = req.get(self.url)
         # Save the PDF
@@ -27,14 +25,7 @@ class TimeTable:
             print(response.status_code)
 
     def __convert__(self) -> None:
-        # Convert PDF to PNG
-        pages = p2i.convert_from_path('file.pdf')
-        # Save the image
-        self.nb_pages = len(pages)
-        self.__delImages__()
-        for page in pages:
-            pageName = 'file' + str(pages.index(page)) + self.expentionImage[0]
-            page.save(pageName, self.expentionImage[1])
+        pass
 
     def __del__(self):
         # Delete pdf
@@ -49,8 +40,8 @@ class TimeTable:
 
     def __delImages__(self) -> None:
         for i in range(self.nb_pages):
-            if os.path.exists('file' + str(i) + self.expentionImage[0]):
-                os.remove('file' + str(i) + self.expentionImage[0])
+            if os.path.exists(f'save_{i}.png'):
+                os.remove(f'save_{i}.png')
 
     def __update__(self) -> None:
         # Delete last
