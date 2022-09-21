@@ -6,7 +6,32 @@ false: t.List[str] = ['false', 'f', 'no', 'n', '0']
 true: t.List[str] = ['true', 't', 'yes', 'y', '1']
 
 
+########################################################################################################################
+######################################## Class Bot(d.Client) ###########################################################
+########################################################################################################################
+
+
 class Bot(d.Client):
+    """
+    Class Bot(d.Client)
+    Description:
+        Cette classe est la classe principale du bot, elle hérite de la classe Client de la librairie discord.py
+    Attributs:
+        CommandInit: str
+            Le caractère qui permet d'initialiser une commande
+        boolEvent: bool
+            Booléen qui permet de savoir si l'Event est activé ou non
+        booltimeEvent: bool
+            Booléen qui permet de savoir le type de timerEvent
+        chanelEvent: d.Channel
+            Le channel dans lequel l'Event est lancé
+        clockEvent: Clock
+            L'heure à laquelle l'Event est lancé
+        timerEvent: int
+            Le temps en secondes entre chaque lancement de l'Event
+        timetable: TimeTable
+            L'emploi du temps
+    """
     CommandInit: str = '!'
     boolEvent: bool = False
     timerEvent: int = 10  # 3600
@@ -15,15 +40,36 @@ class Bot(d.Client):
     chanelEvent: d.TextChannel = None
     timetable: TimeTable
 
-    def __init__(self, url: str, *args, **kwargs):
+    def __init__(self, url: str, *args, **kwargs) -> None:
+        """
+        Constructeur de la classe Bot
+        Description:
+            Constructeur de la classe Bot
+        :param url: str -> L'url du bot
+        :param args: t.List[str] -> Les arguments de la classe Client
+        :param kwargs: t.Dict[str, str] -> Les arguments de la classe Client
+        """
         self.timetable = TimeTable(url=url)
         super().__init__(*args, **kwargs)
 
-    async def on_ready(self):
+    async def on_ready(self) -> None:
+        """
+        Fonction on_ready
+        Description:
+            Fonction qui est appelée lorsque le bot est prêt
+        :return: None
+        """
         print('Logged in as {0.user}'.format(self))
         await self.Event()
 
-    async def on_message(self, message: d.Message):
+    async def on_message(self, message: d.Message) -> None:
+        """
+        Fonction on_message
+        Description:
+            Fonction qui est appelée lorsque le bot reçoit un message
+        :param message: d.Message -> Le message reçu
+        :return: None
+        """
         if message.author == self.user:
             return
         if message.content.startswith(self.CommandInit + 'hello'):
@@ -55,7 +101,13 @@ class Bot(d.Client):
         elif message.content.startswith(self.CommandInit + 'setTimeEvent'):
             await self.setTimeEvent(message)
 
-    async def Event(self):
+    async def Event(self) -> None:
+        """
+        Fonction Event
+        Description:
+            Fonction qui est appelée lorsque l'Event est lancé
+        :return: None
+        """
         while not self.is_closed():
             if self.booltimeEvent:
                 await a.sleep(10)
@@ -78,13 +130,25 @@ class Bot(d.Client):
                 else:
                     await self.chanelEvent.send('Emplois du temps')
 
-    async def logout(self):
-        await super().close()
+    async def logout(self) -> None:
+        """
+        Fonction logout
+        Description:
+            Fonction qui permet de déconnecter le bot
+        :return: None
+        """
         await a.sleep(10)
         print('Logged out')
-        exit(0)
+        exit()
 
-    async def setChannelEvent(self, message: d.Message):
+    async def setChannelEvent(self, message: d.Message) -> None:
+        """
+        Fonction setChannelEvent
+        Description:
+            Fonction qui permet de définir le channel dans lequel l'Event est lancé
+        :param message: d.Message -> Le message reçu
+        :return: None
+        """
         c: t.List[str] = message.content.split(' ')
         if len(c) != 1:
             await message.channel.send('Error: Invalid number of arguments')
@@ -93,7 +157,14 @@ class Bot(d.Client):
             await message.channel.send('Channel set to ' + message.channel.name)
             await self.chanelEvent.send("This Channel is now in Event Mode")
 
-    async def startEvent(self, message: d.Message):
+    async def startEvent(self, message: d.Message) -> None:
+        """
+        Fonction startEvent
+        Description:
+            Fonction qui permet de lancer l'Event
+        :param message: d.Message -> Le message reçu
+        :return: None
+        """
         c: t.List[str] = message.content.split(' ')
         if len(c) != 2:
             await message.channel.send('Error: Invalid number of arguments')
@@ -106,7 +177,14 @@ class Bot(d.Client):
             self.boolEvent = True
             await message.channel.send('Event started')
 
-    async def setTimeEvent(self, message: d.Message):
+    async def setTimeEvent(self, message: d.Message) -> None:
+        """
+        Fonction setTimeEvent
+        Description:
+            Fonction qui permet de définir l'heure à laquelle l'Event est lancé
+        :param message: d.Message -> Le message reçu
+        :return: None
+        """
         c: t.List[str] = message.content.split(' ')
         if len(c) != 3:
             await message.channel.send('Error: Invalid number of arguments')
