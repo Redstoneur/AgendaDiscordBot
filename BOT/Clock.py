@@ -1,4 +1,4 @@
-from importBot import t, dt
+from BOT.importBot import t, dt
 
 
 class Clock:

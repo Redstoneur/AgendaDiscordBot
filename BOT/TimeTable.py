@@ -1,4 +1,4 @@
-from importBot import req, os
+from BOT.importBot import req, os
 from PyPDF2 import PdfFileWriter, PdfFileReader
 
 
@@ -19,16 +19,16 @@ class TimeTable:
         response = req.get(self.url)
         # Save the PDF
         if response.status_code == 200:
-            with open('file.pdf', 'wb') as f:
+            with open('../file.pdf', 'wb') as f:
                 f.write(response.content)
         else:
             print(response.status_code)
         f.close()
 
-        inputpdf = PdfFileReader(open("file.pdf", "rb"))
+        inputpdf = PdfFileReader(open("../file.pdf", "rb"))
         output = PdfFileWriter()
         output.addPage(inputpdf.getPage(0))
-        with open("TimeTable.pdf", "wb") as outputStream:
+        with open("../TimeTable.pdf", "wb") as outputStream:
             # noinspection PyTypeChecker
             output.write(outputStream)
         outputStream.close()
@@ -48,10 +48,10 @@ class TimeTable:
     def __defPdf__(self, select: int = 0) -> None:
         if select not in [0, 1, 2]:
             select = 0
-        if os.path.exists('file.pdf') and select in [0, 1]:
-            os.remove('file.pdf')
-        if os.path.exists('TimeTable.pdf') and select in [0, 2]:
-            os.remove('TimeTable.pdf')
+        if os.path.exists('../file.pdf') and select in [0, 1]:
+            os.remove('../file.pdf')
+        if os.path.exists('../TimeTable.pdf') and select in [0, 2]:
+            os.remove('../TimeTable.pdf')
 
     def __delImages__(self) -> None:
         for i in range(self.nb_pages):

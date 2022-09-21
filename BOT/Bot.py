@@ -1,8 +1,6 @@
-import discord.mentions
-
-from Clock import *
-from TimeTable import TimeTable
-from importBot import t, d, a, os
+from BOT.Clock import *
+from BOT.TimeTable import TimeTable
+from BOT.importBot import t, d, a, os
 
 false: t.List[str] = ['false', 'f', 'no', 'n', '0']
 true: t.List[str] = ['true', 't', 'yes', 'y', '1']
@@ -73,10 +71,10 @@ class Bot(d.Client):
                     await self.chanelEvent.send(file=d.File('TimeTable.png'))
                 elif os.path.exists('TimeTable.png'):
                     await self.chanelEvent.send('Emplois du temps :')
-                    await self.chanelEvent.send(file=d.File('TimeTable.pdf'))
-                elif os.path.exists('file.pdf'):
+                    await self.chanelEvent.send(file=d.File('../TimeTable.pdf'))
+                elif os.path.exists('../file.pdf'):
                     await self.chanelEvent.send('Emplois du temps :')
-                    await self.chanelEvent.send(file=d.File('file.pdf'))
+                    await self.chanelEvent.send(file=d.File('../file.pdf'))
                 else:
                     await self.chanelEvent.send('Emplois du temps')
 
@@ -131,6 +129,3 @@ class Bot(d.Client):
                 await message.channel.send('Error: Invalid second argument')
         else:
             await message.channel.send('Error: Invalid sequence of arguments')
-
-
-
