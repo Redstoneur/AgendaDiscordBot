@@ -4,7 +4,6 @@ import asyncio as a
 import typing as t
 import datetime as dt
 import requests as req
-import pdf2image as p2i
 
 if __name__ == '__main__':
     print('This is a module, not a script')
@@ -26,7 +25,4 @@ if __name__ == '__main__':
     # if requests is imported, it will be imported as req
     if req is None:
         raise ImportError('Requests not imported')
-    # if pdf2image is imported, it will be imported as p2i
-    if p2i is None:
-        raise ImportError('Pdf2image not imported')
     print('All modules imported')

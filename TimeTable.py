@@ -1,5 +1,5 @@
-from importBot import req, p2i, os, t
-import time
+from importBot import req, os
+from PyPDF2 import PdfFileWriter, PdfFileReader
 
 
 class TimeTable:
@@ -14,7 +14,7 @@ class TimeTable:
         self.__convert__()
 
     def __download__(self) -> None:
-        self.__defPdf__()
+        # self.__defPdf__()
         # Send GET request
         response = req.get(self.url)
         # Save the PDF
@@ -23,20 +23,35 @@ class TimeTable:
                 f.write(response.content)
         else:
             print(response.status_code)
+        f.close()
+
+        inputpdf = PdfFileReader(open("file.pdf", "rb"))
+        output = PdfFileWriter()
+        output.addPage(inputpdf.getPage(0))
+        with open("TimeTable.pdf", "wb") as outputStream:
+            # noinspection PyTypeChecker
+            output.write(outputStream)
+        outputStream.close()
 
     def __convert__(self) -> None:
+        # Convert pdf to image (png)
+        # todo: convert pdf to image (png)
         pass
 
-    def __del__(self):
+    def __delFile__(self):
         # Delete pdf
         self.__defPdf__()
         # Delete images
         self.__delImages__()
 
     # noinspection PyMethodMayBeStatic
-    def __defPdf__(self) -> None:
-        if os.path.exists('file.pdf'):
+    def __defPdf__(self, select: int = 0) -> None:
+        if select not in [0, 1, 2]:
+            select = 0
+        if os.path.exists('file.pdf') and select in [0, 1]:
             os.remove('file.pdf')
+        if os.path.exists('TimeTable.pdf') and select in [0, 2]:
+            os.remove('TimeTable.pdf')
 
     def __delImages__(self) -> None:
         for i in range(self.nb_pages):
@@ -45,7 +60,7 @@ class TimeTable:
 
     def __update__(self) -> None:
         # Delete last
-        self.__del__()
+        # self.__delFile__()
         # Download pdf
         self.__download__()
         # Convert pdf to image

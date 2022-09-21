@@ -1,3 +1,5 @@
+import discord.mentions
+
 from Clock import *
 from TimeTable import TimeTable
 from importBot import t, d, a, os
@@ -67,9 +69,13 @@ class Bot(d.Client):
             if self.boolEvent and self.chanelEvent is not None:
                 self.timetable.__update__()
                 if os.path.exists('file.png'):
-                    await self.chanelEvent.send('@Redstoneur Emplois du temps :')
-                    await self.chanelEvent.send(file=d.File('file.png'))
+                    await self.chanelEvent.send('Emplois du temps :')
+                    await self.chanelEvent.send(file=d.File('TimeTable.png'))
+                elif os.path.exists('TimeTable.png'):
+                    await self.chanelEvent.send('Emplois du temps :')
+                    await self.chanelEvent.send(file=d.File('TimeTable.pdf'))
                 elif os.path.exists('file.pdf'):
+                    await self.chanelEvent.send('Emplois du temps :')
                     await self.chanelEvent.send(file=d.File('file.pdf'))
                 else:
                     await self.chanelEvent.send('Emplois du temps')
