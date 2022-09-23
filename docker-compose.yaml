@@ -1,0 +1,9 @@
+version: "3.8"
+
+services:
+  agenda-bot:
+    image: agenda-bot
+    build: ./Dockerfile
+    environment:
+      - URL=YOUR_URL
+      - TOKEN=YOUR_TOKEN
