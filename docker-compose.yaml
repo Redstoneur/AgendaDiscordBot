@@ -5,5 +5,5 @@ services:
     image: agenda-bot
     build: .
     environment:
-      - TOKEN=MTAyMTMxNTk2NDQzMzg2Njc3NQ.GuXWur.E5ofvG_t10TaWZ-I1FdTIGAgNeQs9okcryChAc
-      - URL=http://chronos.iut-velizy.uvsq.fr/EDT/g37478.pdf
+      - TOKEN=YOUR_TOKEN
+      - URL=YOUR_URL
