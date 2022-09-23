@@ -21,7 +21,7 @@ def main(url: str = None, Token: str = None) -> None:
     # vérification de l'url
     if url is None:
         try:
-            Token: str = os.environ['URL']
+            url: str = os.environ['URL']
         except KeyError:
             raise KeyError('URL not found')
     else:

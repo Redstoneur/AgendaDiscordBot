@@ -3,7 +3,7 @@ version: "3.8"
 services:
   agenda-bot:
     image: agenda-bot
-    build: ./Dockerfile
+    build: .
     environment:
-      - URL=YOUR_URL
-      - TOKEN=YOUR_TOKEN
+      - TOKEN=MTAyMTMxNTk2NDQzMzg2Njc3NQ.GuXWur.E5ofvG_t10TaWZ-I1FdTIGAgNeQs9okcryChAc
+      - URL=http://chronos.iut-velizy.uvsq.fr/EDT/g37478.pdf
