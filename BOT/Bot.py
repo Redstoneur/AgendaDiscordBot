@@ -81,25 +81,23 @@ class Bot(d.Client):
         elif message.content.endswith('quoi'):
             await message.channel.send('feur')
 
+        elif message.content.startswith(self.CommandInit + 'iamAdmin'):
+            await self.isAdmin(message, True)
+
         elif message.content.startswith(self.CommandInit + 'off'):
-            if message.author.roles[-1].permissions.administrator:
-                await message.channel.send('Bye!')
-                await self.logout()
-            else:
-                await message.channel.send('You are not an administrator')
+            await self.off(message=message)
 
         elif message.content.startswith(self.CommandInit + 'setCommandInit'):
-            self.CommandInit = message.content.split(' ')[1]
-            await message.channel.send('CommandInit set to ' + self.CommandInit)
+            await self.setCommandInit(message=message)
 
         elif message.content.startswith(self.CommandInit + 'startEvent'):
-            await self.startEvent(message)
+            await self.startEvent(message=message)
 
         elif message.content.startswith(self.CommandInit + 'setChannelEvent'):
-            await self.setChannelEvent(message)
+            await self.setChannelEvent(message=message)
 
         elif message.content.startswith(self.CommandInit + 'setTimeEvent'):
-            await self.setTimeEvent(message)
+            await self.setTimeEvent(message=message)
 
     async def Event(self) -> None:
         """
@@ -130,6 +128,23 @@ class Bot(d.Client):
                 else:
                     await self.chanelEvent.send('Emplois du temps')
 
+    async def isAdmin(self, message: d.Message, commande: bool = False) -> bool:
+        """
+        Fonction isAdmin
+        Description:
+            Fonction qui permet de savoir si l'utilisateur est un administrateur
+        :param message: d.Message -> Le message reçu
+        :param commande: bool -> Booléen qui permet de savoir si la commande est une commande
+        :return: bool -> True si l'utilisateur est un administrateur, False sinon
+        """
+        for role in message.author.roles:
+            if role.permissions.administrator:
+                if commande:
+                    await message.channel.send(message.author.mention + "\nVous êtes administrateur !")
+                return True
+        await message.channel.send(message.author.mention + "\n Vous n'êtes pas administrateur !")
+        return False
+
     async def logout(self) -> None:
         """
         Fonction logout
@@ -141,6 +156,31 @@ class Bot(d.Client):
         print('Logged out')
         exit()
 
+    async def off(self, message: d.Message) -> None:
+        """
+        Fonction off
+        Description:
+            Fonction qui permet d'éteindre le bot
+        :param message: d.Message -> Le message reçu
+        :return: None
+        """
+        if await self.isAdmin(message=message):
+            await message.channel.send('Bye !')
+            await self.logout()
+
+    async def setCommandInit(self, message: d.Message) -> None:
+        """
+        Fonction setCommandInit
+        Description:
+            Fonction qui permet de changer le caractère d'initialisation des commandes
+        :param message: d.Message -> Le message reçu
+        :return: None
+        """
+        if await self.isAdmin(message=message):
+            self.CommandInit = message.content.split(' ')[1]
+            await message.channel.send("Le caractère d'initialisation des commandes est maintenant : '" +
+                                       self.CommandInit + "'")
+
     async def setChannelEvent(self, message: d.Message) -> None:
         """
         Fonction setChannelEvent
@@ -149,13 +189,14 @@ class Bot(d.Client):
         :param message: d.Message -> Le message reçu
         :return: None
         """
-        c: t.List[str] = message.content.split(' ')
-        if len(c) != 1:
-            await message.channel.send('Error: Invalid number of arguments')
-        else:
-            self.chanelEvent = message.channel
-            await message.channel.send('Channel set to ' + message.channel.name)
-            await self.chanelEvent.send("This Channel is now in Event Mode")
+        if await self.isAdmin(message=message):
+            c: t.List[str] = message.content.split(' ')
+            if len(c) != 1:
+                await message.channel.send('Error: Invalid number of arguments')
+            else:
+                self.chanelEvent = message.channel
+                await message.channel.send('Channel set to ' + message.channel.name)
+                await self.chanelEvent.send("This Channel is now in Event Mode")
 
     async def startEvent(self, message: d.Message) -> None:
         """
@@ -165,17 +206,18 @@ class Bot(d.Client):
         :param message: d.Message -> Le message reçu
         :return: None
         """
-        c: t.List[str] = message.content.split(' ')
-        if len(c) != 2:
-            await message.channel.send('Error: Invalid number of arguments')
-        elif c[1].lower() not in false + true:
-            await message.channel.send('Error: Invalid argument')
-        elif c[1].lower() in false:
-            self.boolEvent = False
-            await message.channel.send('Event stopped')
-        elif c[1].lower() in true:
-            self.boolEvent = True
-            await message.channel.send('Event started')
+        if await self.isAdmin(message=message):
+            c: t.List[str] = message.content.split(' ')
+            if len(c) != 2:
+                await message.channel.send('Error: Invalid number of arguments')
+            elif c[1].lower() not in false + true:
+                await message.channel.send('Error: Invalid argument')
+            elif c[1].lower() in false:
+                self.boolEvent = False
+                await message.channel.send('Event stopped')
+            elif c[1].lower() in true:
+                self.boolEvent = True
+                await message.channel.send('Event started')
 
     async def setTimeEvent(self, message: d.Message) -> None:
         """
@@ -185,25 +227,26 @@ class Bot(d.Client):
         :param message: d.Message -> Le message reçu
         :return: None
         """
-        c: t.List[str] = message.content.split(' ')
-        if len(c) != 3:
-            await message.channel.send('Error: Invalid number of arguments')
-        elif c[1].lower() not in ["hms", "s"]:
-            await message.channel.send('Error: Invalid first argument : ' + c[2])
-        elif c[1].lower() in ["s"]:
-            if c[2].isdigit():
-                self.booltimeEvent = False
-                self.timerEvent = int(c[2])
-                await message.channel.send('Time set to ' + c[2] + 's')
+        if await self.isAdmin(message=message):
+            c: t.List[str] = message.content.split(' ')
+            if len(c) != 3:
+                await message.channel.send('Error: Invalid number of arguments')
+            elif c[1].lower() not in ["hms", "s"]:
+                await message.channel.send('Error: Invalid first argument : ' + c[2])
+            elif c[1].lower() in ["s"]:
+                if c[2].isdigit():
+                    self.booltimeEvent = False
+                    self.timerEvent = int(c[2])
+                    await message.channel.send('Time set to ' + c[2] + 's')
+                else:
+                    await message.channel.send('Error: Invalid second argument')
+            elif c[1].lower() in ["hms"]:
+                heure, minute, seconde = c[2].split(':')
+                if heure.isdigit() and minute.isdigit() and seconde.isdigit():
+                    self.booltimeEvent = True
+                    self.clockEvent = Clock(heure=int(heure), minute=int(minute), seconde=int(seconde))
+                    await message.channel.send('Time set to ' + self.clockEvent.__str__())
+                else:
+                    await message.channel.send('Error: Invalid second argument')
             else:
-                await message.channel.send('Error: Invalid second argument')
-        elif c[1].lower() in ["hms"]:
-            heure, minute, seconde = c[2].split(':')
-            if heure.isdigit() and minute.isdigit() and seconde.isdigit():
-                self.booltimeEvent = True
-                self.clockEvent = Clock(heure=int(heure), minute=int(minute), seconde=int(seconde))
-                await message.channel.send('Time set to ' + self.clockEvent.__str__())
-            else:
-                await message.channel.send('Error: Invalid second argument')
-        else:
-            await message.channel.send('Error: Invalid sequence of arguments')
+                await message.channel.send('Error: Invalid sequence of arguments')
