@@ -317,7 +317,7 @@ class Bot(d.Client):
         """
         await a.sleep(10)
         print('Logged out')
-        exit()
+        exit(0)
 
     async def off(self, message: d.Message) -> None:
         """
