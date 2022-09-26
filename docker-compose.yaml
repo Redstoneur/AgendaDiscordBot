@@ -5,7 +5,7 @@ services:
     image: agenda-bot
     build: .
     volumes:
-      - /app/data:/app/data
+        - ./data:/app/data
     environment:
       - TOKEN=YOUR_TOKEN
       - URL=YOUR_URL
