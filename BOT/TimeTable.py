@@ -18,14 +18,17 @@ class TimeTable:
             Le nombre de pages du fichier pdf.
     """
     url: str
+    parentPath = "./"
     nb_pages: int = 4
 
-    def __init__(self, url: str) -> None:
+    def __init__(self, url: str, parentPath: str = "./"):
         """
         Constructeur de la classe TimeTable.
         :param url: str -> L'url du fichier pdf.
+        :param parentPath: str -> Le chemin vers le dossier parent.
         """
         self.url = url
+        self.parentPath = parentPath
         # Download image
         self.__download__()
         # Convert pdf to image
@@ -43,17 +46,17 @@ class TimeTable:
         response = req.get(self.url)
         # Save the PDF
         if response.status_code == 200:
-            with open('../file.pdf', 'wb') as f:
+            with open(self.parentPath + 'file.pdf', 'wb') as f:
                 f.write(response.content)
         else:
             print(response.status_code)
         f.close()
 
         # Récupération de la page 1
-        inputpdf = PdfFileReader(open("../file.pdf", "rb"))
+        inputpdf = PdfFileReader(open(self.parentPath + "file.pdf", "rb"))
         output = PdfFileWriter()
         output.addPage(inputpdf.getPage(0))
-        with open("../TimeTable.pdf", "wb") as outputStream:
+        with open(self.parentPath + "TimeTable.pdf", "wb") as outputStream:
             # noinspection PyTypeChecker
             output.write(outputStream)
         outputStream.close()
@@ -92,10 +95,10 @@ class TimeTable:
         """
         if select not in [0, 1, 2]:
             select = 0
-        if os.path.exists('../file.pdf') and select in [0, 1]:
-            os.remove('../file.pdf')
-        if os.path.exists('../TimeTable.pdf') and select in [0, 2]:
-            os.remove('../TimeTable.pdf')
+        if os.path.exists(self.parentPath + 'file.pdf') and select in [0, 1]:
+            os.remove(self.parentPath + 'file.pdf')
+        if os.path.exists(self.parentPath + 'TimeTable.pdf') and select in [0, 2]:
+            os.remove(self.parentPath + 'TimeTable.pdf')
 
     def __delImages__(self) -> None:
         """
