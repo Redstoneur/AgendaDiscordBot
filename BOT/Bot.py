@@ -135,12 +135,12 @@ class Bot(d.Client):
 
             if self.boolEvent and self.chanelEvent is not None:
                 self.timetable.__update__()
-                if os.path.exists('file.png'):
+                if os.path.exists(self.dataFolder + 'TimeTable.png'):
                     await self.chanelEvent.send('Emplois du temps :')
-                    await self.chanelEvent.send(file=d.File('TimeTable.png'))
-                elif os.path.exists('TimeTable.png'):
+                    await self.chanelEvent.send(file=d.File(self.dataFolder + 'TimeTable.png'))
+                elif os.path.exists(self.dataFolder + 'TimeTable.pdf'):
                     await self.chanelEvent.send('Emplois du temps :')
-                    await self.chanelEvent.send(file=d.File('self.dataFolderTimeTable.pdf'))
+                    await self.chanelEvent.send(file=d.File(self.dataFolder + 'TimeTable.pdf'))
                 elif os.path.exists(self.dataFolder + 'file.pdf'):
                     await self.chanelEvent.send('Emplois du temps :')
                     await self.chanelEvent.send(file=d.File(self.dataFolder + 'file.pdf'))
@@ -316,6 +316,8 @@ class Bot(d.Client):
         :return: None
         """
         await a.sleep(10)
+        self.writeConfig("all")
+        clearTerminal()
         print('Logged out')
         exit(0)
 

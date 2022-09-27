@@ -32,6 +32,9 @@ def main(url: str = None, Token: str = None) -> None:
     intents.message_content = True  # permet de récupérer le contenu des messages
     # intents = d.Intents.all()  # pour tout les intents
 
+    # vider le terminal
+    clearTerminal()
+
     # création du bot
     bot = Bot(url=url, intents=intents)
 

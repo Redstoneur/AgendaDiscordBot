@@ -1,5 +1,6 @@
 from BOT.importBot import req, os
 from PyPDF2 import PdfFileWriter, PdfFileReader
+import aspose.words as aw
 
 
 ########################################################################################################################
@@ -69,8 +70,9 @@ class TimeTable:
         :return: None
         """
         # Convert pdf to image (png)
-        # todo: convert pdf to image (png)
-        pass
+        doc = aw.Document(self.parentPath + "TimeTable.pdf")
+        extractedPage = doc.extract_pages(0, 1)
+        extractedPage.save(self.parentPath + "TimeTable.png")
 
     def __delFile__(self):
         """
