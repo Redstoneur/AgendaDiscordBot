@@ -34,6 +34,7 @@ def main(url: str = None, Token: str = None) -> None:
 
     # vider le terminal
     clearTerminal()
+    print('\nStarting bot...')
 
     # création du bot
     bot = Bot(url=url, intents=intents)

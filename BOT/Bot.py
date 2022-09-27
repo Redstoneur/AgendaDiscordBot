@@ -1,6 +1,6 @@
 from BOT.Clock import *
 from BOT.TimeTable import TimeTable
-from BOT.importBot import t, d, a, os
+from BOT.importBot import t, d, a
 from generique import *
 
 false: t.List[str] = ['false', 'f', 'no', 'n', '0']
@@ -103,20 +103,27 @@ class Bot(d.Client):
         elif message.content.startswith(self.CommandInit + 'off'):
             await self.off(message=message)
 
+        elif message.content.startswith(self.CommandInit + 'clear'):
+            await self.clearChannel(message=message)
+
         elif message.content.startswith(self.CommandInit + 'setCommandInit'):
             await self.setCommandInit(message=message)
 
         elif message.content.startswith(self.CommandInit + 'startEvent'):
             await self.startEvent(message=message)
 
-        elif message.content.startswith(self.CommandInit + 'setChannelEvent'):
-            await self.setChannelEvent(message=message)
+        elif message.content.startswith(self.CommandInit + 'setChanelEvent'):
+            await self.setChanelEvent(message=message)
 
         elif message.content.startswith(self.CommandInit + 'setTimeEvent'):
             await self.setTimeEvent(message=message)
 
         elif message.content.startswith(self.CommandInit + 'seeConfig'):
             await self.seeConfig(message=message)
+
+        elif message.content.startswith(self.CommandInit + 'h') \
+                or message.content.startswith(self.CommandInit + 'help'):
+            await self.help(message=message)
 
     async def Event(self) -> None:
         """
@@ -125,15 +132,23 @@ class Bot(d.Client):
             Fonction qui est appelée lorsque l'Event est lancé
         :return: None
         """
+        Envois: bool = True
         while not self.is_closed():
             if self.booltimeEvent:
-                await a.sleep(10)
-                while self.clockEvent.__inf__(whatTimeIsIt()) is False:
-                    await a.sleep(1)
+                await a.sleep(11)
+                clockEventPlus10seconde: Clock = Clock(self.clockEvent.heure,
+                                                       self.clockEvent.minute,
+                                                       self.clockEvent.seconde + 10)
+                while Envois:
+                    if whatTimeIsIt().__center__(self.clockEvent, clockEventPlus10seconde):
+                        Envois = False
+                    await a.sleep(0.5)
+                Envois = True
             else:
                 await a.sleep(self.timerEvent)
 
             if self.boolEvent and self.chanelEvent is not None:
+                await self.clearChannel(isbot=True, channel=self.chanelEvent)
                 self.timetable.__update__()
                 if os.path.exists(self.dataFolder + 'TimeTable.png'):
                     await self.chanelEvent.send('Emplois du temps :')
@@ -342,14 +357,90 @@ class Bot(d.Client):
         :return: None
         """
         if await self.isAdmin(message=message):
-            self.CommandInit = message.content.split(' ')[1]
-            await message.channel.send("Le caractère d'initialisation des commandes est maintenant : '" +
-                                       self.CommandInit + "'")
-            self.writeConfig("CommandInit", True)
+            if len(message.content.split()) != 2:
+                await message.channel.send(message.author.mention + "\nErreur: Nombre d'arguments invalide")
+            else:
+                self.CommandInit = message.content.split(' ')[1]
+                await message.channel.send("Le caractère d'initialisation des commandes est maintenant : '" +
+                                           self.CommandInit + "'")
+                self.writeConfig("CommandInit", True)
 
-    async def setChannelEvent(self, message: d.Message) -> None:
+    async def help(self, message: d.Message) -> None:
         """
-        Fonction setChannelEvent
+        Fonction help
+        Description:
+            Fonction qui permet d'afficher l'aide du bot
+        :return: None
+        """
+        m = "```txt\n"
+
+        m += "Commandes du bot:\n"
+        m += "    - " + self.CommandInit + "h : Affiche l'aide du bot\n"
+        m += "    - " + self.CommandInit + "help: Affiche l'aide du bot\n"
+        m += "    - " + self.CommandInit + "hello: Affiche un message de bienvenue\n"
+        m += "    - " + self.CommandInit + "iamAdmin: Affiche si l'utilisateur est administrateur\n"
+
+        if await self.isAdmin(message=message, commande=True):
+            m += "    - " + self.CommandInit + "off: Eteint le bot\n"
+            m += "    - " + self.CommandInit + "clear: Efface le channel\n"
+            m += "    - " + self.CommandInit + "seeConfig: Affiche la configuration du bot\n"
+            m += "    - " + self.CommandInit + "setCommandInit <caractère>: Change le caractère d'initialisation des commandes\n"
+            m += "    - " + self.CommandInit + "setChanelEvent <id>: Change le channel de l'Event\n"
+            m += "    - " + self.CommandInit + "setTimeEvent s <secondes>: Change le temps de l'Event\n"
+            m += "    - " + self.CommandInit + "setTimeEvent hms <heures>:<minutes>:<secondes>: Change le temps de l'Event\n"
+            m += "    - " + self.CommandInit + "startEvent <bool>: Démarre ou arrête l'Event\n"
+
+        m += "```"
+        await message.channel.send(m)
+
+    async def clearChannel(self, message: d.Message = None, isbot: bool = False, channel: d.TextChannel = None) -> None:
+        """
+        Fonction clearChannel
+        Description:
+            Fonction qui permet de supprimer tous les messages d'un channel
+        :param message: d.Message -> Le message reçu
+        :param isbot: bool -> Booléen qui permet de savoir si la commande est une commande appelée par le bot
+        :param channel: d.TextChannel -> Le channel à effacer
+        :return: None
+        """
+        c: t.List
+        ch: d.TextChannel
+        if isbot and message is None:
+            c = ["!clear"]
+            ch = self.chanelEvent
+        else:
+            if not await self.isAdmin(message=message):
+                return
+            c: t.List(str) = message.content.split()
+            ch: d.TextChannel = message.channel
+
+        if channel is not None:
+            ch = channel
+
+        if len(c) == 1:
+            c.append("bot")
+        if len(c) == 2:
+            if c[1] in ["all", "me", "bot"]:
+                if c[1] == "all":
+                    await ch.purge()
+                    await ch.send("Le channel a été nettoyé !")
+                elif c[1] == "me":
+                    # purge les messages de l'émétteur du message
+                    await ch.purge(limit=None, check=lambda m: m.author == message.author)
+                    await ch.send("Les messages de " + message.author.mention + " ont été supprimés !")
+                else:
+                    # purge les messages du bot
+                    await ch.purge(limit=None, check=lambda m: m.author == self.user)
+                    if not isbot:
+                        await ch.send("Les messages du bot ont été supprimés !")
+            else:
+                await ch.send(message.author.mention + "\nErreur: Nombre d'arguments invalide")
+        else:
+            await ch.send(message.author.mention + "\nErreur: Nombre d'arguments invalide")
+
+    async def setChanelEvent(self, message: d.Message) -> None:
+        """
+        Fonction setChanelEvent
         Description:
             Fonction qui permet de définir le channel dans lequel l'Event est lancé
         :param message: d.Message -> Le message reçu
@@ -411,15 +502,18 @@ class Bot(d.Client):
                 else:
                     await message.channel.send('Error: Invalid second argument')
             elif c[1].lower() in ["hms"]:
-                heure, minute, seconde = c[2].split(':')
-                if heure.isdigit() and minute.isdigit() and seconde.isdigit():
-                    self.booltimeEvent = True
-                    self.clockEvent = Clock(heure=int(heure), minute=int(minute), seconde=int(seconde))
-                    await message.channel.send('Time set to ' + self.clockEvent.__str__())
-                    self.writeConfig("booltimeEvent", True)
-                    self.writeConfig("clockEvent", True)
-                else:
+                if len(c[2].split(':')) != 3:
                     await message.channel.send('Error: Invalid second argument')
+                else:
+                    heure, minute, seconde = c[2].split(':')
+                    if heure.isdigit() and minute.isdigit() and seconde.isdigit():
+                        self.booltimeEvent = True
+                        self.clockEvent = Clock(heure=int(heure), minute=int(minute), seconde=int(seconde))
+                        await message.channel.send('Time set to ' + self.clockEvent.__str__())
+                        self.writeConfig("booltimeEvent", True)
+                        self.writeConfig("clockEvent", True)
+                    else:
+                        await message.channel.send('Error: Invalid second argument')
             else:
                 await message.channel.send('Error: Invalid sequence of arguments')
 

@@ -168,6 +168,22 @@ class Clock:
                         return True
         return False
 
+    def __center__(self, other: 'Clock', other2: 'Clock') -> bool:
+        """
+        Méthode __center__
+        Description:
+            Cette méthode permet de vérifier si un objet Clock est compris entre deux autres objets Clock.
+        :param other: Clock -> L'autre objet Clock.
+        :param other2: Clock -> L'autre objet Clock.
+        :return: bool true si l'objet Clock est compris entre les deux autres objets Clock.
+        """
+        if isinstance(other, Clock) and isinstance(other2, Clock):
+            if self.__sup__(other) and self.__inf__(other2):
+                return True
+            elif self.__sup__(other2) and self.__inf__(other):
+                return True
+        return False
+
     def __add__(self, other: 'Clock') -> None:
         """
         Méthode __add__
