@@ -121,6 +121,9 @@ class Bot(d.Client):
         elif message.content.startswith(self.CommandInit + 'seeConfig'):
             await self.seeConfig(message=message)
 
+        elif message.content.startswith(self.CommandInit + 'emp'):
+            await self.emp(message=message)
+
         elif message.content.startswith(self.CommandInit + 'h') \
                 or message.content.startswith(self.CommandInit + 'help'):
             await self.help(message=message)
@@ -147,20 +150,43 @@ class Bot(d.Client):
             else:
                 await a.sleep(self.timerEvent)
 
-            if self.boolEvent and self.chanelEvent is not None:
-                await self.clearChannel(isbot=True, channel=self.chanelEvent)
-                self.timetable.__update__()
-                if os.path.exists(self.dataFolder + 'TimeTable.png'):
-                    await self.chanelEvent.send('Emplois du temps :')
-                    await self.chanelEvent.send(file=d.File(self.dataFolder + 'TimeTable.png'))
-                elif os.path.exists(self.dataFolder + 'TimeTable.pdf'):
-                    await self.chanelEvent.send('Emplois du temps :')
-                    await self.chanelEvent.send(file=d.File(self.dataFolder + 'TimeTable.pdf'))
-                elif os.path.exists(self.dataFolder + 'file.pdf'):
-                    await self.chanelEvent.send('Emplois du temps :')
-                    await self.chanelEvent.send(file=d.File(self.dataFolder + 'file.pdf'))
-                else:
-                    await self.chanelEvent.send('Emplois du temps')
+            if self.boolEvent:
+                await self.ExecuteEvent()
+
+    async def ExecuteEvent(self) -> None:
+        """
+        Fonction ExecuteEvent
+        Description:
+            Fonction qui permet d'exécuter l'Event
+        :return: None
+        """
+        if self.chanelEvent is not None:
+            await self.clearChannel(isbot=True, superbotclean=True, channel=self.chanelEvent)
+            self.timetable.__update__()
+            if os.path.exists(self.dataFolder + 'TimeTable.png'):
+                await self.chanelEvent.send('Emplois du temps :')
+                await self.chanelEvent.send(file=d.File(self.dataFolder + 'TimeTable.png'))
+            elif os.path.exists(self.dataFolder + 'TimeTable.pdf'):
+                await self.chanelEvent.send('Emplois du temps :')
+                await self.chanelEvent.send(file=d.File(self.dataFolder + 'TimeTable.pdf'))
+            elif os.path.exists(self.dataFolder + 'file.pdf'):
+                await self.chanelEvent.send('Emplois du temps :')
+                await self.chanelEvent.send(file=d.File(self.dataFolder + 'file.pdf'))
+            else:
+                await self.chanelEvent.send('Emplois du temps')
+
+    async def emp(self, message: d.Message) -> None:
+        """
+        Fonction emp
+        Description:
+            Fonction qui permet d'envoyer l'emplois du temps
+        :param message: d.Message -> Le message reçu
+        :return: None
+        """
+        if await self.isAdmin(message=message):
+            if self.chanelEvent is None:
+                self.chanelEvent = message.channel
+            await self.ExecuteEvent()
 
     def writeCommandInit(self, w: bool = False) -> None:
         """
@@ -389,17 +415,20 @@ class Bot(d.Client):
             m += "    - " + self.CommandInit + "setTimeEvent s <secondes>: Change le temps de l'Event\n"
             m += "    - " + self.CommandInit + "setTimeEvent hms <heures>:<minutes>:<secondes>: Change le temps de l'Event\n"
             m += "    - " + self.CommandInit + "startEvent <bool>: Démarre ou arrête l'Event\n"
+            m += "    - " + self.CommandInit + "emp : lance un event\n"
 
         m += "```"
         await message.channel.send(m)
 
-    async def clearChannel(self, message: d.Message = None, isbot: bool = False, channel: d.TextChannel = None) -> None:
+    async def clearChannel(self, message: d.Message = None, isbot: bool = False,
+                           superbotclean: bool = False, channel: d.TextChannel = None) -> None:
         """
         Fonction clearChannel
         Description:
             Fonction qui permet de supprimer tous les messages d'un channel
         :param message: d.Message -> Le message reçu
         :param isbot: bool -> Booléen qui permet de savoir si la commande est une commande appelée par le bot
+        :param superbotclean: bool -> Booléen qui permet de savoir si la commande est une commande appelée par le bot pour supprimer tous les messages
         :param channel: d.TextChannel -> Le channel à effacer
         :return: None
         """
@@ -418,12 +447,17 @@ class Bot(d.Client):
             ch = channel
 
         if len(c) == 1:
-            c.append("bot")
+            if isbot and superbotclean:
+                c.append("all")
+            else:
+                c.append("bot")
+
         if len(c) == 2:
             if c[1] in ["all", "me", "bot"]:
                 if c[1] == "all":
                     await ch.purge()
-                    await ch.send("Le channel a été nettoyé !")
+                    if not isbot:
+                        await ch.send("Le channel a été nettoyé !")
                 elif c[1] == "me":
                     # purge les messages de l'émétteur du message
                     await ch.purge(limit=None, check=lambda m: m.author == message.author)
