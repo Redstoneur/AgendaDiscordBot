@@ -15,28 +15,28 @@ true: t.List[str] = ['true', 't', 'yes', 'y', '1']
 class Bot(d.Client):
     """
     Class Bot(d.Client)
-    Description:
+    Description :
         Cette classe est la classe principale du bot, elle hérite de la classe Client de la librairie discord.py
-    Attributs:
-        dataFolder: str
+    Attributs :
+        dataFolder : str
             le chemin du dossier de données
-        keys: t.List[str]
+        keys : t.List[str]
             les clés du fichier de configuration
-        CommandInit: str
+        CommandInit : str
             le caractère d'initialisation des commandes
-        boolEvent: bool
+        boolEvent : bool
             booléen qui permet de savoir si l'Event est lancé
-        booltimeEvent: bool
+        booltimeEvent : bool
             booléen qui permet de savoir si l'Event est lancé à une heure précise
-        chanelEvent: d.TextChannel
+        chanelEvent : d.TextChannel
             le channel dans lequel l'Event est lancé
-        timerEvent: int
+        timerEvent : int
             le temps entre chaque lancement de l'Event
-        clockEvent: Clock
+        clockEvent : Clock
             l'heure à laquelle l'Event est lancé
-        timetable: TimeTable
-            l'objet qui permet de récupérer l'emplois du temps
-        fileSystem: JsonFile
+        timetable : TimeTable
+            l'objet qui permet de récupérer l'emploi du temps
+        fileSystem : JsonFile
             le fichier de configuration
     """
     dataFolder: str = './data/'
@@ -55,7 +55,7 @@ class Bot(d.Client):
     def __init__(self, url: str, *args, **kwargs) -> None:
         """
         Constructeur de la classe Bot
-        Description:
+        Description :
             Constructeur de la classe Bot
         :param url: str -> L'url du bot
         :param args: t.List[str] -> Les arguments de la classe Client
@@ -70,7 +70,7 @@ class Bot(d.Client):
     async def on_ready(self) -> None:
         """
         Fonction on_ready
-        Description:
+        Description :
             Fonction qui est appelée lorsque le bot est prêt
         :return: None
         """
@@ -81,7 +81,7 @@ class Bot(d.Client):
     async def on_message(self, message: d.Message) -> None:
         """
         Fonction on_message
-        Description:
+        Description :
             Fonction qui est appelée lorsque le bot reçoit un message
         :param message: d.Message -> Le message reçu
         :return: None
@@ -131,7 +131,7 @@ class Bot(d.Client):
     async def Event(self) -> None:
         """
         Fonction Event
-        Description:
+        Description :
             Fonction qui est appelée lorsque l'Event est lancé
         :return: None
         """
@@ -156,7 +156,7 @@ class Bot(d.Client):
     async def ExecuteEvent(self) -> None:
         """
         Fonction ExecuteEvent
-        Description:
+        Description :
             Fonction qui permet d'exécuter l'Event
         :return: None
         """
@@ -178,8 +178,8 @@ class Bot(d.Client):
     async def emp(self, message: d.Message) -> None:
         """
         Fonction emp
-        Description:
-            Fonction qui permet d'envoyer l'emplois du temps
+        Description :
+            Fonction qui permet d'envoyer l'emploi du temps
         :param message: d.Message -> Le message reçu
         :return: None
         """
@@ -191,7 +191,7 @@ class Bot(d.Client):
     def writeCommandInit(self, w: bool = False) -> None:
         """
         Fonction writeCommandInit
-        Description:
+        Description :
             Fonction qui permet d'écrire le caractère d'initialisation des commandes dans le fichier de configuration
         :return: None
         """
@@ -206,7 +206,7 @@ class Bot(d.Client):
     def writeBoolEvent(self, w: bool = False) -> None:
         """
         Fonction writeBoolEvent
-        Description:
+        Description :
             Fonction qui permet d'écrire le booléen de l'Event dans le fichier de configuration
         :return: None
         """
@@ -221,7 +221,7 @@ class Bot(d.Client):
     def writeBoolTimeEvent(self, w: bool = False) -> None:
         """
         Fonction writeBoolTimeEvent
-        Description:
+        Description :
             Fonction qui permet d'écrire le booléen du temps de l'Event dans le fichier de configuration
         :return: None
         """
@@ -236,7 +236,7 @@ class Bot(d.Client):
     def writeTimerEvent(self, w: bool = False) -> None:
         """
         Fonction writeTimerEvent
-        Description:
+        Description :
             Fonction qui permet d'écrire le timer de l'Event dans le fichier de configuration
         :return: None
         """
@@ -251,7 +251,7 @@ class Bot(d.Client):
     def writeClockEvent(self, w: bool = False) -> None:
         """
         Fonction writeClockEvent
-        Description:
+        Description :
             Fonction qui permet d'écrire l'heure de l'Event dans le fichier de configuration
         :return: None
         """
@@ -267,7 +267,7 @@ class Bot(d.Client):
     def writeChanelEvent(self, w: bool = False) -> None:
         """
         Fonction writeChanelEvent
-        Description:
+        Description :
             Fonction qui permet d'écrire le channel de l'Event dans le fichier de configuration
         :return: None
         """
@@ -285,7 +285,7 @@ class Bot(d.Client):
     def writeConfig(self, key: str = "all", w: bool = False) -> None:
         """
         Fonction writeConfig
-        Description:
+        Description :
             Fonction qui permet d'écrire la configuration du bot dans le fichier config.json
         :return: None
         """
@@ -316,7 +316,7 @@ class Bot(d.Client):
     def verifConfig(self) -> None:
         """
         Fonction verifFileSystem
-        Description:
+        Description :
             Fonction qui permet de vérifier le système de fichier
         :return: None
         """
@@ -332,10 +332,11 @@ class Bot(d.Client):
 
         self.writeConfig("all")
 
+    # noinspection PyMethodMayBeStatic
     async def isAdmin(self, message: d.Message, commande: bool = False) -> bool:
         """
         Fonction isAdmin
-        Description:
+        Description :
             Fonction qui permet de savoir si l'utilisateur est un administrateur
         :param message: d.Message -> Le message reçu
         :param commande: bool -> Booléen qui permet de savoir si la commande est une commande
@@ -352,7 +353,7 @@ class Bot(d.Client):
     async def logout(self) -> None:
         """
         Fonction logout
-        Description:
+        Description :
             Fonction qui permet de déconnecter le bot
         :return: None
         """
@@ -365,7 +366,7 @@ class Bot(d.Client):
     async def off(self, message: d.Message) -> None:
         """
         Fonction off
-        Description:
+        Description :
             Fonction qui permet d'éteindre le bot
         :param message: d.Message -> Le message reçu
         :return: None
@@ -377,7 +378,7 @@ class Bot(d.Client):
     async def setCommandInit(self, message: d.Message) -> None:
         """
         Fonction setCommandInit
-        Description:
+        Description :
             Fonction qui permet de changer le caractère d'initialisation des commandes
         :param message: d.Message -> Le message reçu
         :return: None
@@ -394,7 +395,7 @@ class Bot(d.Client):
     async def help(self, message: d.Message) -> None:
         """
         Fonction help
-        Description:
+        Description :
             Fonction qui permet d'afficher l'aide du bot
         :return: None
         """
@@ -410,10 +411,12 @@ class Bot(d.Client):
             m += "    - " + self.CommandInit + "off: Eteint le bot\n"
             m += "    - " + self.CommandInit + "clear: Efface le channel\n"
             m += "    - " + self.CommandInit + "seeConfig: Affiche la configuration du bot\n"
-            m += "    - " + self.CommandInit + "setCommandInit <caractère>: Change le caractère d'initialisation des commandes\n"
+            m += "    - " + self.CommandInit + "setCommandInit <caractère>: Change le caractère d'initialisation des " \
+                                               "commandes\n "
             m += "    - " + self.CommandInit + "setChanelEvent <id>: Change le channel de l'Event\n"
             m += "    - " + self.CommandInit + "setTimeEvent s <secondes>: Change le temps de l'Event\n"
-            m += "    - " + self.CommandInit + "setTimeEvent hms <heures>:<minutes>:<secondes>: Change le temps de l'Event\n"
+            m += "    - " + self.CommandInit + "setTimeEvent hms <heures>:<minutes>:<secondes>: Change le temps de " \
+                                               "l'Event\n "
             m += "    - " + self.CommandInit + "startEvent <bool>: Démarre ou arrête l'Event\n"
             m += "    - " + self.CommandInit + "emp : lance un event\n"
 
@@ -424,11 +427,12 @@ class Bot(d.Client):
                            superbotclean: bool = False, channel: d.TextChannel = None) -> None:
         """
         Fonction clearChannel
-        Description:
+        Description :
             Fonction qui permet de supprimer tous les messages d'un channel
         :param message: d.Message -> Le message reçu
         :param isbot: bool -> Booléen qui permet de savoir si la commande est une commande appelée par le bot
-        :param superbotclean: bool -> Booléen qui permet de savoir si la commande est une commande appelée par le bot pour supprimer tous les messages
+        :param superbotclean: bool -> Booléen qui permet de savoir si la commande est une commande appelée par le bot
+                                      pour supprimer tous les messages
         :param channel: d.TextChannel -> Le channel à effacer
         :return: None
         """
@@ -475,7 +479,7 @@ class Bot(d.Client):
     async def setChanelEvent(self, message: d.Message) -> None:
         """
         Fonction setChanelEvent
-        Description:
+        Description :
             Fonction qui permet de définir le channel dans lequel l'Event est lancé
         :param message: d.Message -> Le message reçu
         :return: None
@@ -493,7 +497,7 @@ class Bot(d.Client):
     async def startEvent(self, message: d.Message) -> None:
         """
         Fonction startEvent
-        Description:
+        Description :
             Fonction qui permet de lancer l'Event
         :param message: d.Message -> Le message reçu
         :return: None
@@ -515,7 +519,7 @@ class Bot(d.Client):
     async def setTimeEvent(self, message: d.Message) -> None:
         """
         Fonction setTimeEvent
-        Description:
+        Description :
             Fonction qui permet de définir l'heure à laquelle l'Event est lancé
         :param message: d.Message -> Le message reçu
         :return: None
@@ -554,7 +558,7 @@ class Bot(d.Client):
     async def seeConfig(self, message: d.Message) -> None:
         """
         Fonction seeConfig
-        Description:
+        Description :
             Fonction qui permet de voir la configuration du bot
         :param message: d.Message -> Le message reçu
         :return: None

@@ -5,7 +5,7 @@ import os
 def myOS() -> str:
     """
     Fonction myOS
-    Description:
+    Description :
         Cette fonction permet de définir le système d'exploitation.
     :return: str -> OS
     """
@@ -26,7 +26,7 @@ def myOS() -> str:
 def clearTerminal() -> None:
     """
     Fonction clearTerminal
-    Description:
+    Description :
         Cette fonction permet de nettoyer le terminal.
     :return: None
     """

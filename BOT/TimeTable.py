@@ -10,12 +10,12 @@ import aspose.words as aw
 class TimeTable:
     """
     Class TimeTable
-    Description:
+    Description :
         Cette classe permet de gérer les horaires.
-    Attributs:
-        url: str
+    Attributs :
+        url : str
             L'url du fichier pdf.
-        nb_pages: int
+        nb_pages : int
             Le nombre de pages du fichier pdf.
     """
     url: str
@@ -38,7 +38,7 @@ class TimeTable:
     def __download__(self) -> None:
         """
         Méthode __download__
-        Description:
+        Description :
             Cette méthode permet de télécharger le fichier pdf.
         :return: None
         """
@@ -65,7 +65,7 @@ class TimeTable:
     def __convert__(self) -> None:
         """
         Méthode __convert__
-        Description:
+        Description :
             Cette méthode permet de convertir le fichier pdf en image.
         :return: None
         """
@@ -77,7 +77,7 @@ class TimeTable:
     def __delFile__(self):
         """
         Méthode __delFile__
-        Description:
+        Description :
             Cette méthode permet de supprimer le fichier pdf.
         :return: None
         """
@@ -90,7 +90,7 @@ class TimeTable:
     def __defPdf__(self, select: int = 0) -> None:
         """
         Méthode __defPdf__
-        Description:
+        Description :
             Cette méthode permet de définir le fichier pdf.
         :param select: int -> 0: default 1: file.pdf 2: TimeTable.pdf
         :return: None
@@ -105,7 +105,7 @@ class TimeTable:
     def __delImages__(self) -> None:
         """
         Méthode __delImages__
-        Description:
+        Description :
             Cette méthode permet de supprimer les images.
         :return: None
         """
@@ -116,7 +116,7 @@ class TimeTable:
     def __update__(self) -> None:
         """
         Méthode __update__
-        Description:
+        Description :
             Cette méthode permet de mettre à jour le fichier pdf.
         :return: None
         """

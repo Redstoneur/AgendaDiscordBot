@@ -8,14 +8,14 @@ from BOT.importBot import t, dt
 class Clock:
     """
     Class Clock
-    Description:
+    Description :
         Cette classe permet de gérer les horaires.
-    Attributs:
-        heure: int
+    Attributs :
+        heure : int
             L'heure de l'horloge.
-        minute: int
+        minute : int
             Les minutes de l'horloge.
-        seconde: int
+        seconde : int
             Les secondes de l'horloge.
     """
 
@@ -38,7 +38,7 @@ class Clock:
     def __verif__(self) -> None:
         """
         Méthode __verif__
-        Description:
+        Description :
             Cette méthode permet de vérifier les attributs de la classe Clock.
         :return: None
         """
@@ -54,7 +54,7 @@ class Clock:
     def __str__(self) -> str:
         """
         Méthode __str__
-        Description:
+        Description :
             Cette méthode permet de retourner une chaîne de caractères représentant l'objet Clock.
         :return: str
         """
@@ -63,7 +63,7 @@ class Clock:
     def __getinitargs__(self) -> t.Tuple[int, int, int]:
         """
         Méthode __getinitargs__
-        Description:
+        Description :
             Cette méthode permet de retourner un tuple contenant les arguments du constructeur de la classe Clock.
         :return: t.Tuple[int, int, int]
         """
@@ -72,7 +72,7 @@ class Clock:
     def __dict__(self) -> t.Dict[str, int]:
         """
         Méthode __dict__
-        Description:
+        Description :
             Cette méthode permet de retourner un dictionnaire contenant les attributs de la classe Clock.
         :return: t.Dict[str, int]
         """
@@ -81,7 +81,7 @@ class Clock:
     def __getitem__(self, key) -> int:
         """
         Méthode __getitem__
-        Description:
+        Description :
             Cette méthode permet de retourner la valeur d'un attribut de la classe Clock.
         :param key: str -> La clé de l'attribut.
         :return: int
@@ -91,7 +91,7 @@ class Clock:
     def __setitem__(self, key, value) -> None:
         """
         Méthode __setitem__
-        Description:
+        Description :
             Cette méthode permet de modifier la valeur d'un attribut de la classe Clock.
         :param key: str -> La clé de l'attribut.
         :param value: int -> La valeur de l'attribut.
@@ -102,7 +102,7 @@ class Clock:
     def __delitem__(self, key) -> None:
         """
         Méthode __delitem__
-        Description:
+        Description :
             Cette méthode permet de supprimer un attribut de la classe Clock.
         :param key: str -> La clé de l'attribut.
         :return: None
@@ -112,7 +112,7 @@ class Clock:
     def __getkey__(self) -> t.List[str]:
         """
         Méthode __getkey__
-        Description:
+        Description :
             Cette méthode permet de retourner la liste des clés des attributs de la classe Clock.
         :return: t.List[str]
         """
@@ -121,7 +121,7 @@ class Clock:
     def __eq__(self, other: 'Clock') -> bool:
         """
         Méthode __eq__
-        Description:
+        Description :
             Cette méthode permet de vérifier si deux objets Clock sont égaux.
         :param other: Clock -> L'autre objet Clock.
         :return: bool
@@ -133,7 +133,7 @@ class Clock:
     def __sup__(self, other: 'Clock') -> bool:
         """
         Méthode __sup__
-        Description:
+        Description :
             Cette méthode permet de vérifier si un objet Clock est supérieur à un autre objet Clock.
         :param other: Clock -> L'autre objet Clock.
         :return: bool
@@ -152,7 +152,7 @@ class Clock:
     def __inf__(self, other: 'Clock') -> bool:
         """
         Méthode __inf__
-        Description:
+        Description :
             Cette méthode permet de vérifier si un objet Clock est inférieur à un autre objet Clock.
         :param other: Clock -> L'autre objet Clock.
         :return: bool
@@ -171,7 +171,7 @@ class Clock:
     def __center__(self, other: 'Clock', other2: 'Clock') -> bool:
         """
         Méthode __center__
-        Description:
+        Description :
             Cette méthode permet de vérifier si un objet Clock est compris entre deux autres objets Clock.
         :param other: Clock -> L'autre objet Clock.
         :param other2: Clock -> L'autre objet Clock.
@@ -187,7 +187,7 @@ class Clock:
     def __add__(self, other: 'Clock') -> None:
         """
         Méthode __add__
-        Description:
+        Description :
             Cette méthode permet d'ajouter un objet Clock à un autre objet Clock.
         :param other: Clock -> L'autre objet Clock.
         :return:
@@ -207,7 +207,7 @@ class Clock:
     def __getPostClock__(self, other: 'Clock') -> 'Clock':
         """
         Méthode __getPostClock__
-        Description:
+        Description :
             Cette méthode permet de retourner un objet Clock qui est la somme de deux objets Clock.
         :param other: Clock -> L'autre objet Clock.
         :return: Clock
@@ -223,7 +223,7 @@ class Clock:
     def __getPostClock2__(self, heure: int = 0, minute: int = 0, seconde: int = 0) -> 'Clock':
         """
         Méthode __getPostClock2__
-        Description:
+        Description :
             Cette méthode permet de retourner un objet Clock qui est la somme de deux objets Clock.
         :param heure: int -> L'heure de l'objet Clock.
         :param minute: int -> La minute de l'objet Clock.
@@ -242,7 +242,7 @@ class Clock:
 def whatTimeIsIt() -> Clock:
     """
     Fonction whatTimeIsIt
-    Description:
+    Description :
         Cette fonction permet de retourner l'heure actuelle.
     :return: Clock
     """

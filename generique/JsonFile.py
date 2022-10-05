@@ -11,12 +11,12 @@ import typing as t
 class JsonFile:
     """
     Class JsonFile
-    Description:
+    Description :
         Cette classe permet de gérer les fichiers json.
-    Attributes:
-        path: str
+    Attributes :
+        path : str
             Le chemin vers le fichier json.
-        data: dict
+        data : dict
             Les données du fichier json.
     """
     path: str = None
@@ -37,7 +37,7 @@ class JsonFile:
     def read(self) -> None:
         """
         Method read
-        Description:
+        Description :
             Cette méthode permet de lire le fichier json.
         :return: None
         """
@@ -50,7 +50,7 @@ class JsonFile:
     def write(self) -> None:
         """
         Method write
-        Description:
+        Description :
             Cette méthode permet d'écrire dans le fichier json.
         :return: None
         """
@@ -63,7 +63,7 @@ class JsonFile:
     def create(self) -> None:
         """
         Method create
-        Description:
+        Description :
             Cette méthode permet de créer le fichier json vide.
         :return: None
         """
@@ -76,7 +76,7 @@ class JsonFile:
     def __str__(self) -> str:
         """
         Method __str__
-        Description:
+        Description :
             Cette méthode permet de retourner une chaîne de caractères représentant l'objet JsonFile.
         :return: str
         """
@@ -85,7 +85,7 @@ class JsonFile:
     def __dict__(self) -> dict:
         """
         Method __dict__
-        Description:
+        Description :
             Cette méthode permet de retourner un dictionnaire représentant l'objet JsonFile.
         :return: dict
         """
@@ -94,7 +94,7 @@ class JsonFile:
     def __getAllKey__(self) -> t.List[str]:
         """
         Method __getKey__
-        Description:
+        Description :
             Cette méthode permet de retourner la liste des clés du fichier json.
         :return: List[str]
         """
@@ -103,7 +103,7 @@ class JsonFile:
     def __addkey__(self, key: str) -> None:
         """
         Method __addkey__
-        Description:
+        Description :
             Cette méthode permet d'ajouter un attribut à la classe JsonFile.
         :param key: str -> La clé de l'attribut.
         :return: None
@@ -114,7 +114,7 @@ class JsonFile:
     def __getitem__(self, key: str) -> t.Any:
         """
         Method __getitem__
-        Description:
+        Description :
             Cette méthode permet de retourner la valeur d'un attribut de la classe JsonFile.
         :param key: str -> La clé de l'attribut.
         :return: t.Any
@@ -127,7 +127,7 @@ class JsonFile:
     def __setitem__(self, key: str, value: t.Any) -> None:
         """
         Method __setitem__
-        Description:
+        Description :
             Cette méthode permet de modifier la valeur d'un attribut de la classe JsonFile.
         :param key: str -> La clé de l'attribut.
         :param value: t.Any -> La valeur de l'attribut.
@@ -139,7 +139,7 @@ class JsonFile:
     def __delitem__(self, key: str) -> None:
         """
         Method __delitem__
-        Description:
+        Description :
             Cette méthode permet de supprimer un attribut de la classe JsonFile.
         :param key: str -> La clé de l'attribut.
         :return: None
@@ -150,7 +150,7 @@ class JsonFile:
     def __contains__(self, key: str) -> bool:
         """
         Method __contains__
-        Description:
+        Description :
             Cette méthode permet de vérifier si un attribut existe dans la classe JsonFile.
         :param key: str -> La clé de l'attribut.
         :return: bool
@@ -160,7 +160,7 @@ class JsonFile:
     def __iter__(self) -> t.Iterator:
         """
         Method __iter__
-        Description:
+        Description :
             Cette méthode permet d'itérer sur les attributs de la classe JsonFile.
         :return: t.Iterator
         """
@@ -169,7 +169,7 @@ class JsonFile:
     def __len__(self) -> int:
         """
         Method __len__
-        Description:
+        Description :
             Cette méthode permet de retourner le nombre d'attributs de la classe JsonFile.
         :return: int
         """
