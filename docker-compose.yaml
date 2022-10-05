@@ -9,3 +9,6 @@ services:
     environment:
       - TOKEN=YOUR_TOKEN
       - URL=YOUR_URL
+
+volumes:
+    data:
