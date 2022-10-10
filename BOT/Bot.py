@@ -97,6 +97,9 @@ class Bot(d.Client):
         elif message.content.endswith('quoi'):
             await message.channel.send('feur')
 
+        elif message.content.startswith(self.CommandInit + 'whatTimeIsIt'):
+            await message.channel.send('Il est ' + whatTimeIsIt().__str__() + ' !')
+
         elif message.content.startswith(self.CommandInit + 'iamAdmin'):
             await self.isAdmin(message, True)
 
@@ -401,22 +404,24 @@ class Bot(d.Client):
         """
         m = "```txt\n"
 
-        m += "Commandes du bot:\n"
+        m += "Commandes du bot :\n"
         m += "    - " + self.CommandInit + "h : Affiche l'aide du bot\n"
         m += "    - " + self.CommandInit + "help: Affiche l'aide du bot\n"
         m += "    - " + self.CommandInit + "hello: Affiche un message de bienvenue\n"
+        m += "    - " + self.CommandInit + "whatTimeIsIt: Affiche l'heure actuelle sur le serveur du bot\n"
         m += "    - " + self.CommandInit + "iamAdmin: Affiche si l'utilisateur est administrateur\n"
 
         if await self.isAdmin(message=message, commande=True):
+            m += "Commandes Administrateur du bot :\n"
             m += "    - " + self.CommandInit + "off: Eteint le bot\n"
             m += "    - " + self.CommandInit + "clear: Efface le channel\n"
             m += "    - " + self.CommandInit + "seeConfig: Affiche la configuration du bot\n"
             m += "    - " + self.CommandInit + "setCommandInit <caractère>: Change le caractère d'initialisation des " \
-                                               "commandes\n "
+                                               "commandes\n"
             m += "    - " + self.CommandInit + "setChanelEvent <id>: Change le channel de l'Event\n"
             m += "    - " + self.CommandInit + "setTimeEvent s <secondes>: Change le temps de l'Event\n"
             m += "    - " + self.CommandInit + "setTimeEvent hms <heures>:<minutes>:<secondes>: Change le temps de " \
-                                               "l'Event\n "
+                                               "l'Event\n"
             m += "    - " + self.CommandInit + "startEvent <bool>: Démarre ou arrête l'Event\n"
             m += "    - " + self.CommandInit + "emp : lance un event\n"
 
@@ -591,7 +596,12 @@ class Bot(d.Client):
                     config = localConfig if len(c) == 2 or c[2].lower() == 'local' else globalConfig
                     for i in config.keys():
                         if c[1].lower() in [i, "all"]:
-                            msg += i + " : " + str(config[i]) + "\n"
+                            msg += i + " : "
+                            if i == "chanelEvent":
+                                msg += config[i].name
+                            else:
+                                msg += str(config[i])
+                            msg += "\n"
                     await message.channel.send(msg[:-1])
             else:
                 await message.channel.send('Error: Invalid number of arguments')
