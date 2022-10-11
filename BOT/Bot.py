@@ -75,6 +75,8 @@ class Bot(d.Client):
         :return: None
         """
         self.verifConfig()
+        if self.chanelEvent is not None:
+            await self.chanelEvent.send('Bot ready !')
         print('Logged in as {0.user}'.format(self))
         await self.Event()
 
@@ -141,12 +143,12 @@ class Bot(d.Client):
         Envois: bool = True
         while not self.is_closed():
             if self.booltimeEvent:
-                await a.sleep(11)
-                clockEventPlus10seconde: Clock = Clock(self.clockEvent.heure,
-                                                       self.clockEvent.minute,
-                                                       self.clockEvent.seconde + 10)
+                await a.sleep(30)
+                clockEventPlus5seconde: Clock = Clock(self.clockEvent.heure,
+                                                      self.clockEvent.minute,
+                                                      self.clockEvent.seconde + 5)
                 while Envois:
-                    if whatTimeIsIt().__center__(self.clockEvent, clockEventPlus10seconde):
+                    if whatTimeIsIt().__center__(self.clockEvent, clockEventPlus5seconde):
                         Envois = False
                     await a.sleep(0.5)
                 Envois = True
@@ -165,18 +167,26 @@ class Bot(d.Client):
         """
         if self.chanelEvent is not None:
             await self.clearChannel(isbot=True, superbotclean=True, channel=self.chanelEvent)
+
             self.timetable.__update__()
             if os.path.exists(self.dataFolder + 'TimeTable.png'):
-                await self.chanelEvent.send('Emplois du temps :')
-                await self.chanelEvent.send(file=d.File(self.dataFolder + 'TimeTable.png'))
+                file = d.File(self.dataFolder + 'TimeTable.png')
             elif os.path.exists(self.dataFolder + 'TimeTable.pdf'):
-                await self.chanelEvent.send('Emplois du temps :')
-                await self.chanelEvent.send(file=d.File(self.dataFolder + 'TimeTable.pdf'))
+                file = d.File(self.dataFolder + 'TimeTable.pdf')
             elif os.path.exists(self.dataFolder + 'file.pdf'):
-                await self.chanelEvent.send('Emplois du temps :')
-                await self.chanelEvent.send(file=d.File(self.dataFolder + 'file.pdf'))
+                file = d.File(self.dataFolder + 'file.pdf')
             else:
-                await self.chanelEvent.send('Emplois du temps')
+                file = None
+
+            embed = d.Embed(title='Emploi du temps', description='Voici l\'emploi du temps du jour !',
+                            color=0x00ff00, url=self.timetable.url)
+            if file is None:
+                embed.description = "Il n'y a pas d'emploi du temps disponible pour le moment !\n" + \
+                                    "Voir le site pour accéder à l'emploi du temps : " + self.timetable.url
+
+            await self.chanelEvent.send(embed=embed)
+            if file is not None:
+                await self.chanelEvent.send(file=file)
 
     async def emp(self, message: d.Message) -> None:
         """
@@ -462,7 +472,10 @@ class Bot(d.Client):
                 c.append("bot")
 
         if len(c) == 2:
-            if c[1] in ["all", "me", "bot"]:
+            if c[1] in ["all", "me", "bot", "Very-All", "Very-Bot"]:
+                if c[1].split('-')[0] == "Very":
+                    c[1] = c[1].split('-')[1].lower()
+                    isbot = True
                 if c[1] == "all":
                     await ch.purge()
                     if not isbot:
@@ -477,7 +490,11 @@ class Bot(d.Client):
                     if not isbot:
                         await ch.send("Les messages du bot ont été supprimés !")
             else:
-                await ch.send(message.author.mention + "\nErreur: Nombre d'arguments invalide")
+                msg: str = message.author.mention + "\nErreur: L'argument '" + c[1] + "' n'est pas valide \n" + \
+                           "Les arguments valides sont : 'all', 'me', 'bot'"
+                if await self.isAdmin(message=message):
+                    msg += ", 'Very-All', 'Very-Bot'"
+                await ch.send(msg)
         else:
             await ch.send(message.author.mention + "\nErreur: Nombre d'arguments invalide")
 
