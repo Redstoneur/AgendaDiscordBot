@@ -75,8 +75,8 @@ class Bot(d.Client):
         :return: None
         """
         self.verifConfig()
-        if self.chanelEvent is not None:
-            await self.chanelEvent.send('Bot ready !')
+        # if self.chanelEvent is not None:
+        #     await self.chanelEvent.send('Bot ready !')
         print('Logged in as {0.user}'.format(self))
         await self.Event()
 
