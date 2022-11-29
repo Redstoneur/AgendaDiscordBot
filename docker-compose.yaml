@@ -1,6 +1,35 @@
 version: "3.8"
 
 services:
+  agenda-bot-db:
+    image: mysql:latest
+    restart: always
+    volumes:
+      - agenda-bot-db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: agenda_bot
+      MYSQL_USER: agenda_bot
+      MYSQL_PASSWORD: agenda_bot
+    networks:
+      - agenda-bot-network
+    hostname: agenda-bot-db
+
+
+  agenda-bot-phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    environment:
+      PMA_HOST: agenda-bot-db
+      PMA_PORT: 3306
+    ports:
+      - "8080:80"
+    networks:
+      - agenda-bot-network
+    depends_on:
+      - agenda-bot-db
+    hostname: agenda-bot-phpmyadmin
+
   agenda-bot:
     image: agenda-bot
     build: .
@@ -9,6 +38,22 @@ services:
     environment:
       - TOKEN=YOUR_TOKEN
       - URL=YOUR_URL
+      - DB_HOST=agenda-bot-db
+      - DB_USER=agenda_bot
+      - DB_PASSWORD=agenda_bot
+      - DB_NAME=agenda_bot
+      - DB_PORT=3306
+    networks:
+      - agenda-bot-network
+    depends_on:
+      - agenda-bot-db
+      - agenda-bot-phpmyadmin
+    hostname: agenda-bot
 
 volumes:
-    data:
+  data:
+  agenda-bot-db:
+
+networks:
+  agenda-bot-network:
+    driver: bridge

@@ -1,4 +1,5 @@
 from generique.JsonFile import JsonFile
+from generique.BaseDeDonnee import BaseDeDonnee
 import os
 
 

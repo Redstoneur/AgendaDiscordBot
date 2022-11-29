@@ -40,6 +40,7 @@ class Bot(d.Client):
             le fichier de configuration
     """
     dataFolder: str = './data/'
+    initDBFilePath: str = './generation.sql'
     keys: t.List[str] = ['CommandInit', 'boolEvent', 'booltimeEvent', 'chanelEvent', 'clockEvent', 'timerEvent']
 
     CommandInit: str = '!'
@@ -52,7 +53,11 @@ class Bot(d.Client):
     fileSystem: JsonFile = None
     timetable: TimeTable
 
-    def __init__(self, url: str, *args, **kwargs) -> None:
+    BDD: BaseDeDonnee
+
+    def __init__(self,
+                 NameUser: str, Password: str, NameBase: str, Host: str, Port: str,
+                 url: str, *args, **kwargs) -> None:
         """
         Constructeur de la classe Bot
         Description :
@@ -65,6 +70,16 @@ class Bot(d.Client):
             os.mkdir(self.dataFolder[:-1])
 
         self.timetable = TimeTable(url=url, parentPath=self.dataFolder)
+
+        self.BDD = BaseDeDonnee(
+            NameUser=NameUser,
+            Password=Password,
+            NameBase=NameBase,
+            Host=Host,
+            Port=Port,
+            initFilePath=self.initDBFilePath
+        )
+
         super().__init__(*args, **kwargs)
 
     async def on_ready(self) -> None:
